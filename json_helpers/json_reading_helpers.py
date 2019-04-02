@@ -35,10 +35,26 @@ def read_json_file_into_memory(json_file):
     logging.info(f"Reading JSON File Into Memory: {json_file}")
 
     try:
-        file = open(json_file, "r")
-        return json.load(file)
+        with open(json_file, "r") as json_file_obj:
+            return json.load(json_file_obj)
     except Exception as err:
         logging.exception(f"Cannot Read json into memory ({json_file}): {err}")
         raise err
-    finally:
-        file.close()
+
+
+def convert_bytes_array_to_json(bytes_array, encoding="utf-8"):
+    """
+    Purpose:
+        Read Bytes-Array (of a JSON Object) To a JSON Object
+    Args:
+        bytes_array (Bytes Array): Bytes-Array of a JSON Object
+    Returns:
+        json_object (Dictonary): Dictonary representation JSON Object
+    """
+
+    str_representation = bytes_array.decode(encoding)
+    str_representation = str_representation.replace("'", '"')
+    json_object = json.loads(str_representation)
+
+    return json_object
+
